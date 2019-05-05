@@ -1,5 +1,5 @@
-#ifndef A4_MATRIX_UTILS_HPP
-#define A4_MATRIX_UTILS_HPP
+#ifndef MATRIX_UTILS_HPP
+#define MATRIX_UTILS_HPP
 
 #include "matrix.hpp"
 #include "vector.hpp"

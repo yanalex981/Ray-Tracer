@@ -32,18 +32,18 @@ std::optional<hit> plane::intersect(const glm::dvec4 &ray_start, const glm::dvec
 	auto v = intersection.y;
 
 	// check if solution is in bounds of the 2x2 sq
- 	if (-1.0 <= u && u <= 1.0 && -1.0 <= v && v <= 1.0)
-    {
-	    glm::dvec4 normal{ 0.0, 0.0, 1.0, 1.0 };
-	    auto world_normal = dir_to_world(transforms, normal);
-	    auto world_pt = transforms * glm::dvec4(intersection, 1.0);
+	if (-1.0 <= u && u <= 1.0 && -1.0 <= v && v <= 1.0)
+	{
+		glm::dvec4 normal{ 0.0, 0.0, 1.0, 1.0 };
+		auto world_normal = dir_to_world(transforms, normal);
+		auto world_pt = transforms * glm::dvec4(intersection, 1.0);
 
-	    return {{
+		return {{
 			glm::normalize(glm::dvec3(world_normal / world_normal.w)),
 			glm::dvec3(world_pt / world_pt.w),
 			this
-	    }};
-    }
+		}};
+	}
 
 	return {};
 }

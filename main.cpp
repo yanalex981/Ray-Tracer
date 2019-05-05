@@ -158,7 +158,7 @@ int main()
 	ball.m_material.fallout = 256;
 
 	plane ground;
-	ground.transforms = glm::scale(glm::identity<glm::dmat4>(), glm::dvec3{ 100.0, 100.0, 100.0 }) * glm::rotate(glm::identity<glm::dmat4>(), glm::degrees(-M_PI / 2), glm::dvec3{ 0, 1, 0 });
+	ground.transforms = glm::scale(glm::identity<glm::dmat4>(), glm::dvec3{ 100.0, 100.0, 100.0 }) * glm::rotate(glm::identity<glm::dmat4>(), -M_PI / 2, glm::dvec3{ 1, 0, 0 });
 	ground.m_material.color = glm::dvec3{ 180, 180, 180 };
 	ground.m_material.k_ambient = 0.1;
 	ground.m_material.k_diffuse = 1;
@@ -208,9 +208,9 @@ int main()
 
 			double specular = bulb.intensity * hit.obj->m_material.k_specular * std::pow(std::max(0.0, glm::dot(ref, v)), hit.obj->m_material.fallout);
 
-			auto r = static_cast<uint8_t>(glm::clamp(std::round(diffuse * hit.obj->m_material.color.x + ambient + specular), 255.0, 0.0));
-			auto g = static_cast<uint8_t>(glm::clamp(std::round(diffuse * hit.obj->m_material.color.y + ambient + specular), 255.0, 0.0));
-			auto b = static_cast<uint8_t>(glm::clamp(std::round(diffuse * hit.obj->m_material.color.z + ambient + specular), 255.0, 0.0));
+			auto r = static_cast<uint8_t>(glm::clamp(std::round(diffuse * hit.obj->m_material.color.x + ambient + specular), 0.0, 255.0));
+			auto g = static_cast<uint8_t>(glm::clamp(std::round(diffuse * hit.obj->m_material.color.y + ambient + specular), 0.0, 255.0));
+			auto b = static_cast<uint8_t>(glm::clamp(std::round(diffuse * hit.obj->m_material.color.z + ambient + specular), 0.0, 255.0));
 
 			// trace those shadows!
 			auto obstruction = find_intersection(scene, bulb.position, glm::dvec4{hit.world_pt, 1});
@@ -228,10 +228,9 @@ int main()
 			}
 
 			// for debugging
-			// how that colorful sphere was made, I was checking its normals
-//		    uint8_t r = static_cast<uint8_t>(clamp(hit.normal.x * 255, 255, 0));
-//		    uint8_t g = static_cast<uint8_t>(clamp(hit.normal.y * 255, 255, 0));
-//		    uint8_t b = static_cast<uint8_t>(clamp(hit.normal.z * 255, 255, 0));
+		    // uint8_t r = static_cast<uint8_t>(glm::clamp(hit.normal.x * 255.0, 0.0, 255.0));
+		    // uint8_t g = static_cast<uint8_t>(glm::clamp(hit.normal.y * 255.0, 0.0, 255.0));
+		    // uint8_t b = static_cast<uint8_t>(glm::clamp(hit.normal.z * 255.0, 0.0, 255.0));
 
 			image.setPixel(x, y, sf::Color{ r, g, b, 255 });
 		}
