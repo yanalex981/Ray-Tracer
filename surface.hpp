@@ -7,9 +7,6 @@
 #include <glm/glm.hpp>
 #include <glm/ext/matrix_transform.hpp>
 
-// #include "matrix.hpp"
-// #include "matrix_utils.hpp"
-// #include "vector.hpp"
 #include "material.hpp"
 
 struct hit;

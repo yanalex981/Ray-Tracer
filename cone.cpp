@@ -12,7 +12,7 @@ vec4d normal(const vec3d &v)
 	return roty(atan2(v.x(), v.z())) * vec4d{{ 0, 1, 1, 1 }};
 }
 
-std::optional<hit> cone::intersect(const vec4d &ray_start, const vec4d &ray_end)
+std::optional<hit> cone::intersect(const glm::dvec4 &ray_start, const glm::dvec4 &ray_end)
 {
 	// warp ray into model space
 	auto inv = invert(transforms);

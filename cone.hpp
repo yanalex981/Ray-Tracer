@@ -5,7 +5,7 @@
 
 struct cone : public surface
 {
-	virtual std::optional<hit> intersect(const vec4d &ray_start, const vec4d &ray_end);
+	virtual std::optional<hit> intersect(const glm::dvec4 &ray_start, const glm::dvec4 &ray_end);
 };
 
 
