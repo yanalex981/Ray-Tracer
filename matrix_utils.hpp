@@ -239,6 +239,7 @@ constexpr matrix<T, 4, 4> perspective(T far, T near, T left, T right, T top, T b
 
 	return s1 * t1 * mp;
 }
+
 template<typename T>
 constexpr matrix<T, 4, 4> screen(T width, T height)
 {
