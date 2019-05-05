@@ -10,6 +10,10 @@ LINKER = $(addprefix -L,$(LIBPATH)) $(addprefix -l,$(LIBS))
 tracer: main.o vector.o plane.o cone.o sphere.o
 	$(CXX) $(CXXFLAGS) $^ $(LINKER) -o $@ -pthread -ludev -lXrandr
 
+3rdparty/json/:
+	git clone --recursive https://github.com/nlohmann/json $@
+	git submodule update --recursive
+
 sphere.o: surface.hpp sphere.hpp sphere.cpp matrix_utils.hpp material.hpp matrix.hpp vector.hpp
 plane.o: surface.hpp plane.hpp plane.cpp matrix_utils.hpp material.hpp matrix.hpp vector.hpp
 cone.o: surface.hpp cone.hpp cone.cpp matrix_utils.hpp material.hpp matrix.hpp vector.hpp
