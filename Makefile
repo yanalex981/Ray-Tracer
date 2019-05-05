@@ -7,7 +7,7 @@ CXXFLAGS = -Wextra -Wall -Wno-missing-braces -mavx -march=native -std=c++17 -O3 
 LINKER = $(addprefix -L,$(LIBPATH)) $(addprefix -l,$(LIBS))
 # LDFLAGS=-Wl,-R -Wl,/usr/local/lib/
 
-tracer: main.o plane.o cone.o sphere.o
+tracer: main.o plane.o cone.o sphere.o vector.o
 	$(CXX) $(CXXFLAGS) $^ $(LINKER) -o $@ -pthread -ludev -lXrandr
 
 3rdparty/json/:
@@ -19,11 +19,11 @@ tracer: main.o plane.o cone.o sphere.o
 3rdparty/glm/:
 	git clone --recursive https://github.com/g-truc/glm $@
 
-sphere.o: surface.hpp sphere.hpp sphere.cpp material.hpp
-plane.o: surface.hpp plane.hpp plane.cpp material.hpp
-cone.o: surface.hpp cone.hpp cone.cpp material.hpp
-# vector.o: vector.cpp vector.hpp
-main.o: main.cpp light.hpp surface.hpp plane.hpp cone.hpp material.hpp sphere.hpp
+sphere.o: surface.hpp sphere.hpp sphere.cpp material.hpp vector.hpp
+plane.o: surface.hpp plane.hpp plane.cpp material.hpp vector.hpp
+cone.o: surface.hpp cone.hpp cone.cpp material.hpp vector.hpp
+vector.o: vector.cpp vector.hpp
+main.o: main.cpp light.hpp surface.hpp plane.hpp cone.hpp material.hpp sphere.hpp vector.hpp
 
 .PHONY: clean
 clean:
