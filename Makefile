@@ -11,7 +11,9 @@ tracer: main.o vector.o plane.o cone.o sphere.o
 	$(CXX) $(CXXFLAGS) $^ $(LINKER) -o $@ -pthread -ludev -lXrandr
 
 3rdparty/json/:
-	git clone --recursive https://github.com/nlohmann/json $@
+	git submodule update --recursive
+
+3rdparty/imgui/:
 	git submodule update --recursive
 
 sphere.o: surface.hpp sphere.hpp sphere.cpp matrix_utils.hpp material.hpp matrix.hpp vector.hpp
