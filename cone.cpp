@@ -13,10 +13,12 @@
 glm::dvec4 normal(const glm::dvec3 &v)
 {
 	glm::dmat4 id = glm::identity<glm::dmat4>();
-	double angle = glm::degrees(std::atan2(v.x, v.z));
+	double angle = std::atan2(v.x, v.z);
 	glm::dvec3 axis = glm::dvec3{ 0, 1, 0 };
 
-	return glm::rotate(id, angle, axis) * glm::dvec4{ 0, 1, 1, 1 };
+	auto n = glm::rotate(id, angle, axis) * glm::dvec4{ 0, 1, 1, 1 };
+
+	return n;
 }
 
 std::optional<hit> cone::intersect(const glm::dvec4 &ray_start, const glm::dvec4 &ray_end)
@@ -59,7 +61,10 @@ std::optional<hit> cone::intersect(const glm::dvec4 &ray_start, const glm::dvec4
 	auto w24 = transforms * glm::dvec4(i2, 1); // intersection in world coords
 	auto w2 = w24 / w24.w;
 	auto n24 = dir_to_world(transforms, normal(i2)); // normal dir in world coords
-	auto n2 = n24 / n24.w;
+	n24.w = 0;
+	n24 = normalize(n24);
+	n24.w = 1;
+	auto n2 = n24;
 	auto dot2 = glm::dot(i2 - tip, v); // shadow of the intersection on the axis
 	bool d2_in_range = 0 <= dot2 && dot2 <= 1; // the shadow should be positive and less than 1
 	// >1 means the point is below the base of the cone, which is not actually part of the cone we want
@@ -79,7 +84,10 @@ std::optional<hit> cone::intersect(const glm::dvec4 &ray_start, const glm::dvec4
 	auto w14 = transforms * glm::dvec4(i1, 1);
 	auto w1 = w14 / w14.w;
 	auto n14 = dir_to_world(transforms, normal(i1));
-	auto n1 = n14 / n14.w;
+	n14.w = 0;
+	n14 = normalize(n14);
+	n14.w = 1;
+	auto n1 = n14;
 	auto dot1 = glm::dot(i1 - tip, v);
 	bool d1_in_range = 0 <= dot1 && dot1 <= 1;
 	hit hit1{ n1, w1, this };

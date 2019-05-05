@@ -152,10 +152,14 @@ int main()
 	sphere ball;
 	ball.transforms = glm::translate(glm::identity<glm::dmat4>(), glm::dvec3{ -20.0, 20.0, 0.0 }) * glm::scale(glm::identity<glm::dmat4>(), glm::dvec3{ 20.0, 20.0, 20.0 });
 	ball.m_material.color = glm::dvec3{ 255, 150, 0 };
-	ball.m_material.k_ambient = 0.08;
+	// ball.m_material.k_ambient = 0.08;
+	// ball.m_material.k_diffuse = 1;
+	// ball.m_material.k_specular = 255;
+	// ball.m_material.fallout = 256;
+	ball.m_material.k_ambient = 0;
 	ball.m_material.k_diffuse = 1;
-	ball.m_material.k_specular = 255;
-	ball.m_material.fallout = 256;
+	ball.m_material.k_specular = 0;
+	ball.m_material.fallout = 0;
 
 	plane ground;
 	ground.transforms = glm::scale(glm::identity<glm::dmat4>(), glm::dvec3{ 100.0, 100.0, 100.0 }) * glm::rotate(glm::identity<glm::dmat4>(), -M_PI / 2, glm::dvec3{ 1, 0, 0 });
@@ -168,7 +172,11 @@ int main()
 	cone dunce;
 	dunce.transforms = glm::translate(glm::identity<glm::dmat4>(), glm::dvec3{ 40.0, 0.0, 0.0 }) * glm::scale(glm::identity<glm::dmat4>(), glm::dvec3{ 20.0, 20.0, 20.0 }) * glm::scale(glm::identity<glm::dmat4>(), glm::dvec3{ 1.0, 2.0, 1.0 });
  	dunce.m_material.color = glm::dvec3{ 0, 180, 180 };
-	dunce.m_material.k_ambient = 0.12;
+	// dunce.m_material.k_ambient = 0.1;
+	// dunce.m_material.k_diffuse = 1;
+	// dunce.m_material.k_specular = 255;
+	// dunce.m_material.fallout = 256;
+	dunce.m_material.k_ambient = 0.1;
 	dunce.m_material.k_diffuse = 1;
 	dunce.m_material.k_specular = 255;
 	dunce.m_material.fallout = 256;
