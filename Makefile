@@ -1,12 +1,13 @@
 CXX = g++
 INCPATH = /usr/local/include/
 LIBPATH = /lib/x86_64-linux-gnu/ /usr/local/lib/
-LIBS = sfml-graphics-s sfml-window-s sfml-system-s GL X11 Xrandr
+LIBS = sfml-graphics sfml-window sfml-system GL X11 Xrandr
 CXXFLAGS = -Wextra -Wall -Wno-missing-braces -mavx -march=native -std=c++17 -O3 -I$(INCPATH)
 LINKER = $(addprefix -L,$(LIBPATH)) $(addprefix -l,$(LIBS))
+LDFLAGS=-Wl,-R -Wl,/usr/local/lib/
 
 tracer: main.o vector.o plane.o cone.o sphere.o
-	$(CXX) $(CXXFLAGS) $^ $(LINKER) -o $@ -pthread -ludev -lXrandr
+	$(CXX) $(LDFLAGS) $(CXXFLAGS) $^ $(LINKER) -o $@ -pthread -ludev -lXrandr
 
 3rdparty/json/:
 	git submodule update --recursive
