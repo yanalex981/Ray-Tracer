@@ -1,14 +1,14 @@
-#ifndef A4_MATERIAL_HPP
-#define A4_MATERIAL_HPP
+#ifndef MATERIAL_HPP
+#define MATERIAL_HPP
+
+#include <glm/glm.hpp>
 
 #include "light.hpp"
-#include "matrix.hpp"
-#include "vector.hpp"
 
 struct material
 {
-	vec3d color;
+	glm::dvec3 color;
 	double k_ambient, k_diffuse, k_specular, k_reflect, fallout;
 };
 
-#endif //A4_MATERIAL_HPP
+#endif

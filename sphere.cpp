@@ -2,20 +2,32 @@
 #include <cmath>
 
 #include "sphere.hpp"
-#include "vector.hpp"
-#include "matrix_utils.hpp"
+// #include "vector.hpp"
+// #include "matrix_utils.hpp"
 
-std::optional<hit> sphere::intersect(const vec4d &ray_start, const vec4d &ray_end)
+glm::dvec4 dir_to_world(const glm::dmat4 &transform, const glm::dvec4 &dir)
 {
-	auto inv = invert(transforms);
-	auto start = cart(inv * ray_start);
-	auto end = cart(inv * ray_end);
-	auto dir = norm(end - start); // warp the ray into model space
+	auto start4 = transform * glm::dvec4{ 0.0, 0.0, 0.0, 1.0 };
+	auto start = start4 / start4.w;
+	auto end4 = transform * dir;
+	auto end = end4 / end4.w;
+
+	return glm::dvec4(glm::dvec3(end - start), 1.0);
+}
+
+std::optional<hit> sphere::intersect(const glm::dvec4 &ray_start, const glm::dvec4 &ray_end)
+{
+	auto inv = glm::inverse(transforms);
+	auto start4 = inv * ray_start;
+	auto start = glm::dvec3(start4 / start4.w);
+	auto end4 = inv * ray_end;
+	auto end = glm::dvec3(end4 / end4.w);
+	auto dir = glm::normalize(end - start); // warp the ray into model space
 
 	// solution to intersection
-	double a = dot(dir, dir);
-	double b = 2 * dot(dir, start);
-	double c = dot(start, start) - 1;
+	double a = glm::dot(dir, dir);
+	double b = 2 * glm::dot(dir, start);
+	double c = glm::dot(start, start) - 1;
 
 	double discrim = b*b - 4*a*c;
 
@@ -33,14 +45,16 @@ std::optional<hit> sphere::intersect(const vec4d &ray_start, const vec4d &ray_en
 
 	// values for one intersection
 	auto i1 = start + dir * t1;
-	auto w1 = cart(transforms * homo(i1));
-	auto n1 = norm(cart(dir_to_world(transforms, homo(i1))));
+	auto w14 = transforms * glm::dvec4(i1, 1.0);
+	auto w1 = w14 / w14.w;
+	auto n1 = glm::normalize(glm::dvec3(dir_to_world(transforms, glm::dvec4(i1, 1.0))));
 	hit hit1{ n1, w1, this };
 
 	// values for the alternate intersection
 	auto i2 = start + dir * t2;
-	auto w2 = cart(transforms * homo(i2));
-	auto n2 = norm(cart(dir_to_world(transforms, homo(i2))));
+	auto w24 = transforms * glm::dvec4(i2, 1.0);
+	auto w2 = w24 / w24.w;
+	auto n2 = glm::normalize(glm::dvec3(dir_to_world(transforms, glm::dvec4(i2, 1.0))));
 	hit hit2{ n2, w2, this };
 
 	// both in front of camera, pick the closest one

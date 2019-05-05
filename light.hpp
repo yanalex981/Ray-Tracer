@@ -1,11 +1,11 @@
 #ifndef LIGHT_HPP
 #define LIGHT_HPP
 
-#include "vector.hpp"
+#include <glm/glm.hpp>
 
 struct light
 {
-	vec4d position;
+	glm::dvec4 position;
 	double intensity;
 };
 
