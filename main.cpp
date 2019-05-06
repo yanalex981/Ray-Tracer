@@ -147,19 +147,15 @@ int main()
 	auto mvp = ms * mp * mc;
 	auto inv = glm::inverse(mvp);
 
-	light bulb{ glm::dvec4{ 40, 80, 0, 1 }, 1.0 };
+	light bulb{ glm::dvec4{ 0, 150, 0, 1 }, 1.0 };
 
 	sphere ball;
 	ball.transforms = glm::translate(glm::identity<glm::dmat4>(), glm::dvec3{ -20.0, 20.0, 0.0 }) * glm::scale(glm::identity<glm::dmat4>(), glm::dvec3{ 20.0, 20.0, 20.0 });
 	ball.m_material.color = glm::dvec3{ 255, 150, 0 };
-	// ball.m_material.k_ambient = 0.08;
-	// ball.m_material.k_diffuse = 1;
-	// ball.m_material.k_specular = 255;
-	// ball.m_material.fallout = 256;
-	ball.m_material.k_ambient = 0;
+	ball.m_material.k_ambient = 0.08;
 	ball.m_material.k_diffuse = 1;
-	ball.m_material.k_specular = 0;
-	ball.m_material.fallout = 0;
+	ball.m_material.k_specular = 255;
+	ball.m_material.fallout = 256;
 
 	plane ground;
 	ground.transforms = glm::scale(glm::identity<glm::dmat4>(), glm::dvec3{ 100.0, 100.0, 100.0 }) * glm::rotate(glm::identity<glm::dmat4>(), -M_PI / 2, glm::dvec3{ 1, 0, 0 });
@@ -170,12 +166,8 @@ int main()
 	ground.m_material.fallout = 25;
 
 	cone dunce;
-	dunce.transforms = glm::translate(glm::identity<glm::dmat4>(), glm::dvec3{ 40.0, 0.0, 0.0 }) * glm::scale(glm::identity<glm::dmat4>(), glm::dvec3{ 20.0, 20.0, 20.0 }) * glm::scale(glm::identity<glm::dmat4>(), glm::dvec3{ 1.0, 2.0, 1.0 });
+	dunce.transforms = glm::translate(glm::identity<glm::dmat4>(), glm::dvec3{ 0.0, 12.0, 0.0 }) * glm::translate(glm::identity<glm::dmat4>(), glm::dvec3{ 40.0, 0.0, 0.0 }) * glm::scale(glm::identity<glm::dmat4>(), glm::dvec3{ 20.0, 20.0, 20.0 }) * glm::scale(glm::identity<glm::dmat4>(), glm::dvec3{ 1.0, 2.0, 1.0 });
  	dunce.m_material.color = glm::dvec3{ 0, 180, 180 };
-	// dunce.m_material.k_ambient = 0.1;
-	// dunce.m_material.k_diffuse = 1;
-	// dunce.m_material.k_specular = 255;
-	// dunce.m_material.fallout = 256;
 	dunce.m_material.k_ambient = 0.1;
 	dunce.m_material.k_diffuse = 1;
 	dunce.m_material.k_specular = 255;
@@ -220,8 +212,13 @@ int main()
 			auto g = static_cast<uint8_t>(glm::clamp(std::round(diffuse * hit.obj->m_material.color.y + ambient + specular), 0.0, 255.0));
 			auto b = static_cast<uint8_t>(glm::clamp(std::round(diffuse * hit.obj->m_material.color.z + ambient + specular), 0.0, 255.0));
 
+			// for debugging
+		    // uint8_t r = static_cast<uint8_t>(glm::clamp(hit.normal.x * 255.0, 0.0, 255.0));
+		    // uint8_t g = static_cast<uint8_t>(glm::clamp(hit.normal.y * 255.0, 0.0, 255.0));
+		    // uint8_t b = static_cast<uint8_t>(glm::clamp(hit.normal.z * 255.0, 0.0, 255.0));
+
 			// trace those shadows!
-			auto obstruction = find_intersection(scene, bulb.position, glm::dvec4{hit.world_pt, 1});
+			auto obstruction = find_intersection(scene, bulb.position, glm::dvec4{ hit.world_pt, 1 });
 			if (obstruction)
 			{
 				auto pt = obstruction.value();
@@ -234,11 +231,6 @@ int main()
 					b = ambient * hit.obj->m_material.color.z;
 				}
 			}
-
-			// for debugging
-		    // uint8_t r = static_cast<uint8_t>(glm::clamp(hit.normal.x * 255.0, 0.0, 255.0));
-		    // uint8_t g = static_cast<uint8_t>(glm::clamp(hit.normal.y * 255.0, 0.0, 255.0));
-		    // uint8_t b = static_cast<uint8_t>(glm::clamp(hit.normal.z * 255.0, 0.0, 255.0));
 
 			image.setPixel(x, y, sf::Color{ r, g, b, 255 });
 		}
